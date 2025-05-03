@@ -1,8 +1,14 @@
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
 public class MainFrame extends JFrame {
@@ -27,16 +33,30 @@ public class MainFrame extends JFrame {
             while (keys.hasNext()) {
                 String code = keys.next();
                 String name = currencies.getString(code);
-                comboBoxFromCurrencies.addItem(name);
-                comboBoxToCurrencies.addItem(name);
+                comboBoxFromCurrencies.addItem(code);
+                // label setzen
+                comboBoxToCurrencies.addItem(code);
+                // label setzen
             }
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        comboBoxFromCurrencies.addActionListener(new ActionListener() {
+        comboBoxFromCurrencies.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void itemStateChanged(ItemEvent e) {
+                ConvertCurrency();
+            }
+        });
+        textFieldCurrValueFrom.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                ConvertCurrency();
+            }
 
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            public void changedUpdate(DocumentEvent e) {
                 ConvertCurrency();
             }
         });
@@ -47,7 +67,7 @@ public class MainFrame extends JFrame {
         try{
             String from = comboBoxFromCurrencies.getSelectedItem().toString();
             String to = comboBoxToCurrencies.getSelectedItem().toString();
-            double exchangeRate = CurrencyListFetcher.getExchangerate(from,to, "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json" );
+            double exchangeRate = CurrencyListFetcher.getExchangerate(from,to, "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/" );
 
             double amount = Double.parseDouble(textFieldCurrValueFrom.getText());
 
