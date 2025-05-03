@@ -18,13 +18,13 @@ public class CurrencyListFetcher {
 
 
     //Wechselkurs von Währung in Währung
-    public static double getExchangerate(String from, String to,String apiUrl)throws Exception{
+    public static double getExchangerate(String from, String to,String apiUrl)throws Exception {
 
 
         // Erstellt URL mit basiswährung
         String urlStr = apiUrl + from.toLowerCase() + ".json";
 
-        JSONObject obj =fetchJson(new URL(urlStr));
+        JSONObject obj = fetchJson(new URL(urlStr));
 
         //Extrahiert das Objekt mit den Kursen für die Zielwährung
         JSONObject umrechnungsrate =obj.getJSONObject(from.toLowerCase());
